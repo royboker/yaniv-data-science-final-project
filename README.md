@@ -9,10 +9,12 @@ Text classification on Twitter data using NLP techniques.
 
 ## Datasets
 
-Located in `data-sets/`:
+The datasets are too large for GitHub and need to be downloaded manually.
 
-- `labeled_data.csv` — Tweets labeled as Hate Speech, Offensive Language, or Neither.
-- `training.1600000.processed.noemoticon.csv` — Sentiment140 corpus (1.6M tweets, positive/negative).
+1. Download the datasets from [Google Drive](https://drive.google.com/drive/folders/1vunlVSQtdbLfMzc2UK5e9GzQ9wsmRSCa?usp=sharing)
+2. Place the files inside the `data-sets/` folder:
+   - `labeled_data.csv` — Tweets labeled as Hate Speech, Offensive Language, or Neither.
+   - `training.1600000.processed.noemoticon.csv` — Sentiment140 corpus (1.6M tweets, positive/negative).
 
 ## Setup
 
