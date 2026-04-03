@@ -4,16 +4,14 @@ Text classification on Twitter data using NLP techniques.
 
 ## Notebooks
 
-- **Phase 1 — Hate Speech Detection** (`notebooks/phase1_hate_speech.ipynb`): EDA and preprocessing of the hate speech & offensive language dataset (~25K tweets, 3 classes).
 - **Phase 1 — Sentiment Analysis** (`notebooks/phase1_sentiment140.ipynb`): EDA and preprocessing of the Sentiment140 dataset (1.6M tweets, binary sentiment).
 
 ## Datasets
 
-The datasets are too large for GitHub and need to be downloaded manually.
+The dataset is too large for GitHub and needs to be downloaded manually.
 
-1. Download the datasets from [Google Drive](https://drive.google.com/drive/folders/1vunlVSQtdbLfMzc2UK5e9GzQ9wsmRSCa?usp=sharing)
-2. Place the files inside the `data-sets/` folder:
-   - `labeled_data.csv` — Tweets labeled as Hate Speech, Offensive Language, or Neither.
+1. Download the dataset from [Google Drive](https://drive.google.com/drive/folders/1vunlVSQtdbLfMzc2UK5e9GzQ9wsmRSCa?usp=sharing)
+2. Place the file inside the `data-sets/` folder:
    - `training.1600000.processed.noemoticon.csv` — Sentiment140 corpus (1.6M tweets, positive/negative).
 
 ## Setup
