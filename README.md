@@ -1,5 +1,13 @@
 # Data Science Final Project
 
+**Participants:**
+| Name | ID |
+|------|-----|
+| Noam Kadosh | 207328428 |
+| Roy Boker | 208577098 |
+| Gal Tayeb | 207338104 |
+| Noam Dahan | 318821774 |
+
 Text classification on Twitter data using NLP techniques.
 
 ## Notebooks
