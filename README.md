@@ -12,7 +12,13 @@ Text classification on Twitter data using NLP techniques.
 
 ## Notebooks
 
-- **Phase 1 — Sentiment Analysis** (`notebooks/phase1_sentiment140.ipynb`): EDA and preprocessing of the Sentiment140 dataset (1.6M tweets, binary sentiment).
+- **Phase 1 — EDA & Preprocessing** (`notebooks/phase1_sentiment140.ipynb`): EDA and preprocessing of the Sentiment140 dataset (1.6M tweets, binary sentiment).
+- **Phase 2 — Models** (one notebook per classifier, each self-contained):
+  - `notebooks/phase2_naive_bayes.ipynb` — `MultinomialNB(alpha=1.0)`
+  - `notebooks/phase2_logistic_regression.ipynb` — `LogisticRegression(C=1.0)`
+  - `notebooks/phase2_linear_svc.ipynb` — `LinearSVC(C=1.0)`
+  - `notebooks/phase2_random_forest.ipynb` — `RandomForestClassifier(n_estimators=100)`
+- **Phase 3 — Cross-model evaluation** (`notebooks/phase3_evaluation.ipynb`): comparison table sorted by F1, three additional experiments (TF-IDF vocabulary variants, hybrid features, GridSearchCV on SVM `C`), and the Sentiment140 benchmark verdict.
 
 ## Datasets
 
