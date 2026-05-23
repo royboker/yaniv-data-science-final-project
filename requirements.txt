@@ -5,4 +5,7 @@ seaborn
 wordcloud
 nltk
 scikit-learn
+scipy
+joblib
+customtkinter
 jupyter
