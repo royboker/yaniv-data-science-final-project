@@ -291,6 +291,11 @@ class ExplanationWindow(ctk.CTkToplevel):
     def _clear_content(self):
         for w in self.content.winfo_children():
             w.destroy()
+        self.content.update_idletasks()
+        try:
+            self.content._parent_canvas.yview_moveto(0)
+        except Exception:
+            pass
 
     def _show_word_tab(self):
         self.tab_word.configure(fg_color='#3b3b3b')
@@ -555,11 +560,17 @@ class App(ctk.CTk):
 
         btn_frame = ctk.CTkFrame(p, fg_color='transparent')
         btn_frame.pack(padx=36, fill='x', pady=(0, 10))
-        ctk.CTkButton(btn_frame, text='Analyze',
+        self.analyze_btn = ctk.CTkButton(btn_frame, text='Analyze',
                       font=ctk.CTkFont(size=14, weight='bold'),
                       height=40, corner_radius=10,
-                      command=self._on_analyze).pack(side='left', expand=True,
-                                                      fill='x', padx=(0, 6))
+                      command=self._on_analyze)
+        self.analyze_btn.pack(side='left', expand=True, fill='x', padx=(0, 6))
+        self._spinner_frames = ['⠋ Analyzing...', '⠙ Analyzing...', '⠹ Analyzing...',
+                                '⠸ Analyzing...', '⠼ Analyzing...', '⠴ Analyzing...',
+                                '⠦ Analyzing...', '⠧ Analyzing...', '⠇ Analyzing...',
+                                '⠏ Analyzing...']
+        self._spinner_idx = 0
+        self._spinner_job = None
         ctk.CTkButton(btn_frame, text='Clear',
                       font=ctk.CTkFont(size=14), height=40, corner_radius=10,
                       fg_color='transparent', border_width=1,
@@ -595,6 +606,24 @@ class App(ctk.CTk):
         ctk.CTkLabel(self.hist_frame, text='No analyses yet',
                      font=ctk.CTkFont(size=11), text_color='#555').pack(pady=10)
 
+    def _start_spinner(self):
+        self.analyze_btn.configure(state='disabled')
+        self._spinner_idx = 0
+
+        def tick():
+            frame = self._spinner_frames[self._spinner_idx % len(self._spinner_frames)]
+            self.analyze_btn.configure(text=frame)
+            self._spinner_idx += 1
+            self._spinner_job = self.after(80, tick)
+
+        tick()
+
+    def _stop_spinner(self):
+        if self._spinner_job:
+            self.after_cancel(self._spinner_job)
+            self._spinner_job = None
+        self.analyze_btn.configure(text='Analyze', state='normal')
+
     def _on_analyze(self):
         self._raw_text = self.text_input.get('1.0', 'end').strip()
         if not self._raw_text:
@@ -605,14 +634,18 @@ class App(ctk.CTk):
             card.reset()
         self.ensemble_card.reset()
         self._clear_highlights()
+        self._start_spinner()
 
         def run():
+            import time
             results = predict_all(self._raw_text, self.vectorizer, self.models)
+            time.sleep(0.9)
             self.after(0, lambda: self._on_results(results))
 
         threading.Thread(target=run, daemon=True).start()
 
     def _on_results(self, results):
+        self._stop_spinner()
         for key, card in self.cards.items():
             if key in results:
                 card.update(*results[key])
