@@ -64,19 +64,31 @@ df  = pd.concat([neg, pos]).sample(frac=1, random_state=42).reset_index(drop=Tru
 print("Preprocessing...")
 df['clean'] = df['text'].apply(preprocess_tweet)
 
-print("Loading vectorizer + models...")
-tfidf = joblib.load(f'{MODELS_DIR}/tfidf_vectorizer.joblib')
-models = {
-    'Naive Bayes':         joblib.load(f'{MODELS_DIR}/naive_bayes.joblib'),
-    'Logistic Regression': joblib.load(f'{MODELS_DIR}/logistic_regression.joblib'),
-    'Linear SVC':          joblib.load(f'{MODELS_DIR}/linear_svc.joblib'),
-    'Random Forest':       joblib.load(f'{MODELS_DIR}/random_forest.joblib'),
-}
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.naive_bayes import MultinomialNB
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import LinearSVC
+from sklearn.ensemble import RandomForestClassifier
 
-X = tfidf.transform(df['clean'])
+print("Fitting TF-IDF and training models on this sample (no leakage)...")
 y = df['label'].values
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2,
-                                                      random_state=42, stratify=y)
+X_train_text, X_test_text, y_train, y_test = train_test_split(
+    df['clean'], y, test_size=0.2, random_state=42, stratify=y)
+
+tfidf = TfidfVectorizer(max_features=5000, ngram_range=(1, 2))
+X_train = tfidf.fit_transform(X_train_text)
+X_test  = tfidf.transform(X_test_text)
+X = tfidf.transform(df['clean'])  # full matrix for CV + learning curve
+
+models = {
+    'Naive Bayes':         MultinomialNB(alpha=1.0),
+    'Logistic Regression': LogisticRegression(C=1.0, max_iter=1000, random_state=42),
+    'Linear SVC':          LinearSVC(C=1.0, random_state=42),
+    'Random Forest':       RandomForestClassifier(n_estimators=100, random_state=42, n_jobs=-1),
+}
+for name, mdl in models.items():
+    print(f"  Training {name}...")
+    mdl.fit(X_train, y_train)
 
 COLORS = ['#4a90d9','#4dc97a','#a06adf','#e8973a']
 

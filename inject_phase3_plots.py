@@ -36,7 +36,7 @@ for cell in nb['cells']:
         continue
     src = ''.join(cell['source'])
     for keyword, png_path in CELL_MAP.items():
-        if keyword in src and not cell.get('outputs'):
+        if keyword in src:
             cell['outputs'] = [make_image_output(png_path)]
             cell['execution_count'] = 1
             print(f"  Injected {png_path} -> cell containing '{keyword}'")
